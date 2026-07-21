@@ -70,7 +70,7 @@ Product-wise Sales
 Customer-wise Sales
 Gross Revenue
 
-**Sample Query**
+** Query**
 SELECT
     s.date,
     p.product,
@@ -83,6 +83,22 @@ ON p.product_code=s.product_code
 JOIN fact_gross_price g
 ON g.product_code=s.product_code
 AND g.fiscal_year=get_fiscal_year(s.date);
+
+
+select
+            get_fiscal_year(date) as fiscal_year,
+            sum(round(sold_quantity*g.gross_price,2)) as yearly_sales
+	from fact_sales_monthly s
+	join fact_gross_price g
+	on 
+	    g.fiscal_year=get_fiscal_year(s.date) and
+	    g.product_code=s.product_code
+	where
+	    customer_code=90002002
+	group by get_fiscal_year(date)
+	order by fiscal_year;
+
+    
 
 **Business Insights**
 Automated fiscal year calculations using reusable SQL functions.
